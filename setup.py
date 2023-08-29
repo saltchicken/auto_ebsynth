@@ -35,5 +35,7 @@ setup(
         ] 
     },
     python_requires='>=3.5'
-    # packages=['imgInfo']
+    install_requires=[
+        'image_gridder @ git+https://github.com/saltchicken/image_gridder.git@master#egg=image_gridder'],
+    ]
 )
