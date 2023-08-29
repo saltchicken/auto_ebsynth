@@ -1,6 +1,6 @@
-import argparse, subprocess, os
+import argparse, subprocess, os, shutil, time
 from image_gridder import grid_joiner, grid_splitter
-import shutil
+from run_a1111 import process_image
 
 def split_video_to_png(input, output, rate):
     if os.path.exists(output) and os.path.isdir(output):
@@ -12,6 +12,7 @@ def split_video_to_png(input, output, rate):
         os.mkdir(output)
         os.mkdir(output + '/frames')
         os.mkdir(output + '/keyframes')
+        os.mkdir(output + '/tempkeyframes')
     
     ffmpeg_command = [
         'ffmpeg',
@@ -43,14 +44,17 @@ def main():
     
     split_video_to_png(args.input, output_path, args.rate)
     image_files = [f for f in os.listdir(output_path + '/frames') if f.endswith('.png')]
-    shutil.copy(output_path + '/frames/' + image_files[0], output_path + '/keyframes')
-    shutil.copy(output_path + '/frames/' + image_files[int(len(image_files) / 3)], output_path + '/keyframes')
-    shutil.copy(output_path + '/frames/' + image_files[int(len(image_files) / 3) * 2], output_path + '/keyframes')
-    shutil.copy(output_path + '/frames/' + image_files[len(image_files) - 1], output_path + '/keyframes')
+    shutil.copy(output_path + '/frames/' + image_files[0], output_path + '/tempkeyframes')
+    shutil.copy(output_path + '/frames/' + image_files[int(len(image_files) / 3)], output_path + '/tempkeyframes')
+    shutil.copy(output_path + '/frames/' + image_files[int(len(image_files) / 3) * 2], output_path + '/tempkeyframes')
+    shutil.copy(output_path + '/frames/' + image_files[len(image_files) - 1], output_path + '/tempkeyframes')
     
-    grid_joiner(output_path + '/keyframes/')
+    grid_joiner(output_path + '/tempkeyframes/', output_path + '/')
+    process_image(output_path + '/combined_grid.png', output_path)
+    # TODO Make this wait for API return
+    time.sleep(5)
     # TODO Better way to fet filenames of keyframes
-    grid_splitter('combined_grid2.png', ['00001', '00006', '00011', '00015'])
+    grid_splitter(output_path + '/filtered.png', output_path + '/keyframes', ['00001', '00006', '00011', '00015'])
     
     
 if __name__ == "__main__":

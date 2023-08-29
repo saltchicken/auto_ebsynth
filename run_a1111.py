@@ -62,12 +62,10 @@ class ControlnetRequest:
         encoded_image = base64.b64encode(bytes).decode('utf-8')
         return encoded_image
 
-
-if __name__ == '__main__':
-    path = 'me.png'
+def process_image(image_path, output_path):
     prompt = ''
 
-    control_net = ControlnetRequest(prompt, path)
+    control_net = ControlnetRequest(prompt, image_path)
     control_net.build_body()
     output = control_net.send_request()
 
@@ -75,4 +73,9 @@ if __name__ == '__main__':
 
     image = Image.open(io.BytesIO(base64.b64decode(result.split(",", 1)[0])))
     # image.show()
-    image.save('isitworking.png')
+    image.save(output_path + '/filtered.png')
+    
+    
+if __name__ == '__main__':
+    process_image()
+    
