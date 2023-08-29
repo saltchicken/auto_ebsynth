@@ -1,25 +1,13 @@
 import argparse, subprocess, os
-import image_gridder
+from image_gridder import grid_joiner, grid_splitter
 import shutil
-
-# def count_files_in_folder(folder_path):
-#     file_count = 0
-#     for item in os.listdir(folder_path):
-#         item_path = os.path.join(folder_path, item)
-#         if os.path.isfile(item_path):
-#             file_count += 1
-#     return file_count
-
-if __name__ == "__main__":
-    folder_path = '/path/to/your/folder'
-    num_files = count_files_in_folder(folder_path)
-    print(f"Number of files in '{folder_path}': {num_files}")
-
 
 def split_video_to_png(input, output, rate):
     if os.path.exists(output) and os.path.isdir(output):
         # TODO Check if files are in the output folder
-        pass
+        print("Output already exists")
+        # TODO better error checking if output already exists
+        return False
     else:
         os.mkdir(output)
         os.mkdir(output + '/frames')
@@ -51,15 +39,18 @@ def main():
     
     # if args.flag:
     #     print('Flag is set')
+    output_path = args.output + '_' + args.input.split('.')[0]
     
+    split_video_to_png(args.input, output_path, args.rate)
+    image_files = [f for f in os.listdir(output_path + '/frames') if f.endswith('.png')]
+    shutil.copy(output_path + '/frames/' + image_files[0], output_path + '/keyframes')
+    shutil.copy(output_path + '/frames/' + image_files[int(len(image_files) / 3)], output_path + '/keyframes')
+    shutil.copy(output_path + '/frames/' + image_files[int(len(image_files) / 3) * 2], output_path + '/keyframes')
+    shutil.copy(output_path + '/frames/' + image_files[len(image_files) - 1], output_path + '/keyframes')
     
-    split_video_to_png(args.input, args.output, args.rate)
-    # num_files = count_files_in_folder(args.output)
-    image_files = [f for f in os.listdir(args.output + '/frames') if f.endswith('.png')]
-    shutil.copy(args.output + '/frames/' + image_files[0], args.output + '/keyframes')
-
-    
-    
+    grid_joiner(output_path + '/keyframes/')
+    # TODO Better way to fet filenames of keyframes
+    grid_splitter('combined_grid2.png', ['00001', '00006', '00011', '00015'])
     
     
 if __name__ == "__main__":
