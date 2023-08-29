@@ -20,7 +20,7 @@ setup(
 	author='John Eicher',
 	author_email='john.eicher89@gmail.com',
 	packages=find_packages(),
-	download_url='https://github.com/saltchicken/imgInfo',
+	download_url='https://github.com/saltchicken/auto_ebsynth',
 	maintainer_email='john.eicher89@gmail.com',
 	install_requires=install_requires,
 	long_description=long_description,
@@ -34,8 +34,8 @@ setup(
             'auto_ebsynth = auto_ebsynth:main'
         ] 
     },
-    python_requires='>=3.5'
+    python_requires='>=3.5',
     install_requires=[
-        'image_gridder @ git+https://github.com/saltchicken/image_gridder.git@master#egg=image_gridder'],
+        'image_gridder @ git+https://github.com/saltchicken/image_gridder.git@master#egg=image_gridder',
     ]
 )
