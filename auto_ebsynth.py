@@ -1,4 +1,5 @@
 import argparse, subprocess, os
+import image_gridder
 
 def split_video_to_png(input, output, rate):
     if os.path.exists(output) and os.path.isdir(output):
