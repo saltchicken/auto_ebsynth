@@ -52,6 +52,7 @@ def main():
     grid_joiner(output_path + '/tempkeyframes/', output_path + '/')
     process_image(output_path + '/combined_grid.png', output_path)
     # TODO Make this wait for API return
+    # Resize the output. In this case double, but make sure its getting the correct resolution
     time.sleep(5)
     # TODO Better way to fet filenames of keyframes
     grid_splitter(output_path + '/filtered.png', output_path + '/keyframes', ['00001', '00006', '00011', '00015'])
