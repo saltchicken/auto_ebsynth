@@ -28,24 +28,24 @@ class ControlnetRequest:
             "batch_size": 1,
             "steps": 20,
             "cfg_scale": 7,
+            "width": 576,
+            "height": 1024,
             "alwayson_scripts": {
                 "controlnet": {
                     "args": [
                         {
                             "enabled": True,
-                            "module": "none",
-                            "model": "canny",
+                            "module": "lineart",
+                            "model": "lineart",
                             "weight": 1.0,
                             "image": self.read_image(),
                             "resize_mode": 1,
                             "lowvram": False,
-                            "processor_res": 64,
-                            "threshold_a": 64,
-                            "threshold_b": 64,
+                            "processor_res": 512,
                             "guidance_start": 0.0,
                             "guidance_end": 1.0,
                             "control_mode": 0,
-                            "pixel_perfect": False
+                            "pixel_perfect": True
                         }
                     ]
                 }
