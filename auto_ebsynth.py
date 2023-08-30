@@ -1,6 +1,7 @@
 import argparse, subprocess, os, shutil, time
 from image_gridder import grid_joiner, grid_splitter
 from run_a1111 import process_image
+from pyesrgan import run_esrgan
 
 def split_video_to_png(input, output, rate):
     if os.path.exists(output) and os.path.isdir(output):
@@ -51,11 +52,11 @@ def main():
     
     grid_joiner(output_path + '/tempkeyframes/', output_path + '/')
     process_image(output_path + '/combined_grid.png', output_path)
-    # TODO Make this wait for API return
-    # Resize the output. In this case double, but make sure its getting the correct resolution
-    time.sleep(5)
-    # TODO Better way to fet filenames of keyframes
-    grid_splitter(output_path + '/filtered.png', output_path + '/keyframes', ['00001', '00006', '00011', '00015'])
+    run_esrgan(output_path + '/filtered.png', output_path + '/resized.png', 2)
+    directory_path = output_path + "/tempkeyframes"
+    all_items = os.listdir(directory_path)
+    file_names = [item for item in all_items if os.path.isfile(os.path.join(directory_path, item))]
+    grid_splitter(output_path + '/resized.png', output_path + '/keyframes', file_names)
     
     
 if __name__ == "__main__":
