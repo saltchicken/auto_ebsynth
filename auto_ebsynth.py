@@ -1,6 +1,6 @@
 import argparse, subprocess, os, shutil, time
 from image_gridder import grid_joiner, grid_splitter
-from run_a1111 import process_image
+from pyA1111 import process_image
 from pyesrgan import run_esrgan
 from pyframes import video_to_frames
 
@@ -37,7 +37,7 @@ def main():
     shutil.copy(output_path + '/frames/' + image_files[len(image_files) - 1], output_path + '/tempkeyframes')
     
     grid_joiner(output_path + '/tempkeyframes/', output_path + '/')
-    process_image(output_path + '/combined_grid.png', output_path)
+    process_image(output_path + '/combined_grid.png', output_path + '/filtered.png')
     run_esrgan(output_path + '/filtered.png', output_path + '/resized.png', 2)
     directory_path = output_path + "/tempkeyframes"
     all_items = os.listdir(directory_path)
